@@ -107,6 +107,7 @@ public class Camera2Fragment extends Fragment
 
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture texture) {
+
         }
 
     };
@@ -182,6 +183,7 @@ public class Camera2Fragment extends Fragment
 
 
     /**
+     *
      * {@link CaptureRequest.Builder} for the camera preview
      */
     private CaptureRequest.Builder mPreviewRequestBuilder;

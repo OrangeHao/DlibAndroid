@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
-import android.os.Handler
 import android.widget.Toast
 import com.orange.dlibandroid.camera2.Camera2Activity
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -42,6 +41,13 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
         }
+
+        Test.TestInteger()
+    }
+
+
+    private fun test(){
+
     }
 
     companion object {
@@ -56,6 +62,8 @@ class MainActivity : AppCompatActivity() {
         external fun getTransteString(originStr: String): String
 
         external fun getTransteArray(originArray: IntArray): String
+
+
     }
 
 
