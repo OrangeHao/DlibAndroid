@@ -10,18 +10,11 @@ set(NATIVE_DIR ${CMAKE_SOURCE_DIR}/src/main/cpp)
 include(${NATIVE_DIR}/dlib/cmake)
 
 
-add_library( # Sets the name of the library.
-        test-lib
-
-        # Sets the library as a shared library.
-        SHARED
-
-        # Provides a relative path to your source file(s).
-        src/main/cpp/test.cpp )
 
 add_library(
         dlib_native
         SHARED
+        src/main/cpp/java_models.h
         src/main/cpp/dlib_native.cpp )
 
 
@@ -36,8 +29,9 @@ find_library( # Sets the name of the path variable.
 
 
 target_link_libraries( # Specifies the target library.
-        test-lib
         dlib_native
+        dlib
+        jnigraphics
         # Links the target library to the log library
         # included in the NDK.
         ${log-lib} )

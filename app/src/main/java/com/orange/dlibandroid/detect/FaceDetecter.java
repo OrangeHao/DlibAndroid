@@ -8,10 +8,10 @@ import java.util.List;
 public class FaceDetecter {
 
     static {
-        System.loadLibrary("");
+        System.loadLibrary("dlib_native");
     }
 
 
-    private static native FaceRect[] jniFaceDetect(int [] pixels,int height,int width);
+    public static native FaceRect[] jniFaceDetect(int [] pixels,int height,int width);
 
 }

@@ -10,6 +10,8 @@ public class FaceRect {
     private int right;
     private int bottom;
 
+    FaceRect(){}
+
     public FaceRect(int l, int t, int r, int b){
         left=l;
         top=t;

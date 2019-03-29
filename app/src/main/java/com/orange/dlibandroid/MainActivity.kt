@@ -2,6 +2,8 @@ package com.orange.dlibandroid
 
 import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 
 import android.os.Bundle
@@ -16,9 +18,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        Toast.makeText(this, stringFromJni, Toast.LENGTH_LONG).show()
 
         dlib_act_btn.setOnClickListener {
             var rxPermissions = RxPermissions(this)
@@ -43,28 +42,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         Test.TestInteger()
+
+
+        test()
     }
 
 
     private fun test(){
-
+        val bitmap=BitmapFactory.decodeResource(resources,R.drawable.gyy).copy(Bitmap.Config.ARGB_8888, true)
+        Test.setBitmap(bitmap)
+        faceImg.setImageBitmap(bitmap)
     }
 
-    companion object {
-
-        init {
-            System.loadLibrary("test-lib")
-        }
-
-        val stringFromJni: String
-            external get
-
-        external fun getTransteString(originStr: String): String
-
-        external fun getTransteArray(originArray: IntArray): String
 
 
-    }
 
 
 }
