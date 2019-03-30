@@ -74,7 +74,7 @@ jobjectArray getFaceResult(JNIEnv *env, const std::vector<int>img,int height,int
         }
     }
     clock_t t2 = clock();
-    LOGD("bitmap trans time: %d ms",(t2-t1)*1000/CLOCKS_PER_SEC);
+    LOGD("bitmap to gray cost time: %d ms",(t2-t1)*1000/CLOCKS_PER_SEC);
 
     clock_t begin = clock();
     std::vector<dlib::rectangle> dets= m_facedetector(image);
