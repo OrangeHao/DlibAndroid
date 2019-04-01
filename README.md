@@ -1,10 +1,10 @@
 # DlibAndroid
 
 
-Dlib Android端测试demo，cmake编译
-所做工作：
-Dlib开源模型拷进来
-jni相关编写
+Dlib Android端测试demo，cmake编译  
+所做工作:  
+Dlib开源模型拷进来  
+jni相关编写  
 测试界面编写
 
 ## Dlib相关
