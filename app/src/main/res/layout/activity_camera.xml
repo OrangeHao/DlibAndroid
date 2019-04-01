@@ -11,18 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
-    <TextView
-        android:id="@+id/fullscreen_content"
+
+    <com.orange.dlibandroid.widget.CoverView
+        android:id="@+id/coverView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="DLIB"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold" />
+        android:layout_height="match_parent" />
 
 </FrameLayout>

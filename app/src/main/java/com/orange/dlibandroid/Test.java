@@ -1,9 +1,15 @@
 package com.orange.dlibandroid;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.YuvImage;
+import android.hardware.Camera;
 import android.util.Log;
 
 import com.orange.dlibandroid.detect.FaceDetecter;
@@ -73,7 +79,7 @@ public class Test {
         return  result_rect;
     }
 
-    private static int[] face_detection2(Bitmap origin_image){
+    public static int[] face_detection2(Bitmap origin_image){
         int width = origin_image.getWidth();
         int height = origin_image.getHeight();
         int[] pixels = new int[width * height];
@@ -110,4 +116,7 @@ public class Test {
         canvas.drawLine(rect[0], rect[3], rect[2], rect[3], p);//down
         canvas.drawLine(rect[2], rect[1], rect[2], rect[3], p);
     }
+
+
+
 }

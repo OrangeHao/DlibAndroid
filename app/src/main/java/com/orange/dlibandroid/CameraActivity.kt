@@ -5,13 +5,21 @@ import android.os.Bundle
 import android.view.SurfaceHolder
 import kotlinx.android.synthetic.main.activity_camera.*
 import android.app.Activity
+import android.graphics.*
+import android.hardware.Camera
+import android.os.AsyncTask
+import android.util.Log
 import android.view.Surface
+import com.orange.dlibandroid.detect.FaceDetecter
+import com.orange.dlibandroid.detect.FaceRect
+import java.io.ByteArrayOutputStream
 
 
-class CameraActivity : AppCompatActivity(),SurfaceHolder.Callback {
+class CameraActivity : AppCompatActivity(), SurfaceHolder.Callback, Camera.PreviewCallback {
 
 
-    var camera:android.hardware.Camera?=null
+    var camera: android.hardware.Camera? = null
+    var mIsDetecting = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,30 +29,36 @@ class CameraActivity : AppCompatActivity(),SurfaceHolder.Callback {
     }
 
 
-    private fun initView(){
-        val surfaceHolder=surfaceView.holder
+    private fun initView() {
+        val surfaceHolder = surfaceView.holder
         surfaceHolder.addCallback(this)
     }
 
-    override fun surfaceCreated(holder: SurfaceHolder?) {
-        camera=android.hardware.Camera.open()
 
-        setCameraDisplayOrientation(this,0,camera!!)
+    override fun surfaceCreated(holder: SurfaceHolder?) {
+        camera = android.hardware.Camera.open()
+
+        setCameraDisplayOrientation(this, 0, camera!!)
         camera?.setAutoFocusMoveCallback { start, camera ->
 
         }
+        camera?.setPreviewCallback(this)
         camera?.setPreviewDisplay(holder)
         camera?.startPreview()
 
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
-
     }
 
+
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
+        holder?.removeCallback(this)
+        camera?.setPreviewCallback(null)
+        camera?.lock()
         camera?.stopPreview()
         camera?.release()
+        camera=null
     }
 
 
@@ -83,7 +97,68 @@ class CameraActivity : AppCompatActivity(),SurfaceHolder.Callback {
         camera.setDisplayOrientation(result)
     }
 
+    override fun onPreviewFrame(data: ByteArray?, camera: Camera?) {
+        if (!mIsDetecting){
+            var size = camera?.getParameters()?.getPreviewSize() //获取预览大小
+            val w = size?.width //宽度
+            val h = size?.height
+            val image = YuvImage(data, ImageFormat.NV21, w!!, h!!, null)
+            var os = ByteArrayOutputStream()
+            if(!image.compressToJpeg(Rect(0, 0, w, h), 100, os)){
+                return
+            }
+            var tem=os.toByteArray()
+            var bmp = BitmapFactory.decodeByteArray(tem, 0, tem.size)
+            if (bmp!=null){
+                bmp=rotateBitmap(bmp,90f)
+                DetectTask().execute(bmp)
+            }
+        }
+    }
 
+    private inner class DetectTask : AsyncTask<Bitmap, Void, List<FaceRect>>() {
+
+        override fun onPreExecute() {
+            mIsDetecting = true
+            super.onPreExecute()
+        }
+
+        override fun doInBackground(vararg bp: Bitmap): List<FaceRect> {
+            val results: List<FaceRect>
+            results = FaceDetecter.face_detection(bp[0]).asList()
+            return results
+        }
+
+        override fun onPostExecute(results: List<FaceRect>) {
+            coverView.setResults(results)
+            mIsDetecting = false
+        }
+    }
+
+
+    /**
+     * 选择变换
+     *
+     * @param origin 原图
+     * @param alpha  旋转角度，可正可负
+     * @return 旋转后的图片
+     */
+    fun rotateBitmap(origin: Bitmap?, alpha: Float): Bitmap? {
+        if (origin == null) {
+            return null
+        }
+        val width = origin.width
+        val height = origin.height
+        val matrix = Matrix()
+        matrix.setRotate(alpha)
+        // 围绕原地进行旋转
+        val newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false)
+        if (newBM == origin) {
+            return newBM
+        }
+        origin.recycle()
+        return newBM
+    }
 
 
 }
